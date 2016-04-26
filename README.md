@@ -2,7 +2,7 @@
 A generic event manager to use on javascript things
 
 ## example
-``js
+```js
 
 import EventManager from 'generic-events';
 
@@ -34,4 +34,4 @@ item.events.on('hello', (name) => console.log(`Hello, my friend named ${name}`);
 items.events.off('hello', fn); // can also remove just a single callback
 item.events.fire('hello', 'Mark'); // Hello, my friend named Mark
 
-``
+```
