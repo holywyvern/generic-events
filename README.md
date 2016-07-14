@@ -9,7 +9,7 @@ import EventManager from 'generic-events';
 class MyItem {
 
   constructor() {
-    this.events = new EvenetManager(); // composition instead of extending, you could use both anyway
+    this.events = new EventManager(); // composition instead of extending, you could use both anyway
   }
 
 }
