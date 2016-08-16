@@ -1,6 +1,6 @@
 {
   "name": "generic-events",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A generic interface to program events",
   "main": "lib/index.js",
   "scripts": {
