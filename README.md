@@ -1,6 +1,9 @@
 # generic-events
 A generic event manager to use on javascript things
 
+[![Build Status](https://travis-ci.org/holywyvern/generic-events.svg?branch=master)](https://travis-ci.org/holywyvern/generic-events)
+[![Documentation](http://inch-ci.org/github/holywyvern/generic-events.svg?branch=master)](http://inch-ci.org/github/holywyvern/generic-events)
+
 ## example
 ```js
 
