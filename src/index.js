@@ -18,12 +18,24 @@ class EventManager {
   
   /**
    * Adds one or more callback to listen for an event.
+   * @param {string} field The variable name.
+   * @param {string} name The name of the callback.
+   * @param {function[]} callbacks A list of callbacks to add
+   * @private
+   */
+  _onFrom(field, name, ...callbacks) {
+    let events = this[field];
+    events[name] = events[name] || [];
+    events[name] = events[name].concat(callbacks);
+  }
+
+  /**
+   * Adds one or more callback to listen for an event.
    * @param {string} name The name of the callback.
    * @param {function[]} callbacks A list of callbacks to add
    */
   on(name, ...callbacks) {
-    this._events[name] = this._events[name] || [];
-    this._events[name] = this._events[name].concat(callbacks);
+    this._onFrom('_events', name, ...callbacks);
   }
   
    /**
@@ -33,8 +45,30 @@ class EventManager {
    * @param {function[]} callbacks A list of callbacks to add
    */
   once(name, ...callbacks) {
-    this._once[name] = this._once[name] || [];
-    this._once[name] = this._once[name].concat(callbacks);
+    this._onFrom('_once', name, ...callbacks);
+  }
+
+  /**
+   * Removes callbacks from an event.
+   * @param { string } field The field name 
+   * @param { string } name The event name 
+   * @param { function[] } callbacks the callbacks to remove
+   * @private
+   */
+  _offFrom(field, name, ...callbacks) {
+    let events = this[field];
+    if (callbacks.length <= 0) {
+      events[name] = [];
+      return;
+    }
+    events[name] = events[name] || [];
+    for (let i = 0; i < callbacks.length; ++i) {
+      let j = events[name].indexOf(callbacks[i]);
+      while (j !== -1) {
+        events[name].splice(j, 1);
+        j = events.indexOf(callbacks[i]);
+      }
+    }
   }
 
  /**
@@ -44,18 +78,7 @@ class EventManager {
    * @warn If the list is empty it will remove all events.
    */
   off(name, ...callbacks) {
-    if (callbacks.length <= 0) {
-      this._events[name] = [];
-      return;
-    }
-    this._events[name] = this._events[name] || [];
-    for (let i = 0; i < callbacks.length; ++i) {
-      let j = this._events[name].indexOf(callbacks[i]);
-      while (j !== -1) {
-        this._events[name].splice(j, 1);
-        j = this._events[name].indexOf(callbacks[i]);
-      }
-    }
+    this._offFrom('_events', name, ...callbacks);
   }
   
    /**
@@ -66,18 +89,28 @@ class EventManager {
    * @warn If the list is empty it will remove all events.
    */
   offOnce(name, ...callbacks) {
-    if (callbacks.length <= 0) {
-      this._once[name] = [];
-      return;
-    }
-    this._once[name] = this._once[name] || [];
-    for (let i = 0; i < callbacks.length; ++i) {
-      let j = this._once[name].indexOf(callbacks[i]);
-      while (j !== -1) {
-        this._once[name].splice(j, 1);
-        j = this._once[name].indexOf(callbacks[i]);
+    this._offFrom('_once', name, ...callbacks);
+  }
+
+  /**
+   * Call events from a field 
+   * @param {string} field The field name 
+   * @param {string} name The event name 
+   * @param { any[] } ...args The arguments to the callbacks.
+   * @private
+   */
+  _callEventsFrom(field, name, ...args) {
+    let events = this[field];
+    events[name] = events[name] || [];
+    let result = true;
+    let length = events[name].length;
+    for (let i = 0; i < length; ++i) {
+      let r = events[name][i](...args);
+      if ( (typeof r !== 'undefined') && !r ) {
+        result = false;
       }
     }
+    return result;    
   }
 
   /**
@@ -88,16 +121,7 @@ class EventManager {
    * @private
    */
   _callRegularEvents(name, ...args) {
-    this._events[name] = this._events[name] || [];
-    let result = true;
-    let length = this._events[name].length;
-    for (let i = 0; i < length; ++i) {
-      let r = this._events[name][i](...args);
-      if ( (typeof r !== 'undefined') && !r ) {
-        result = false;
-      }
-    }
-    return result;
+    return this._callEventsFrom('_events', name, ...args);
   }
 
   /**
@@ -108,15 +132,7 @@ class EventManager {
    * @private
    */
   _callOnceEvents(name, ...args) {
-    this._once[name] = this._once[name] || [];
-    let result = true;
-    let length = this._once[name].length;
-    for (let i = 0; i < length; ++i) {
-      let r = this._once[name][i](...args);
-      if ( (typeof r !== 'undefined') && !r ) {
-        result = false;
-      }
-    }
+    let result = this._callEventsFrom('_once', name, ...args);
     this._once[name] = [];
     return result;
   }
