@@ -3,6 +3,9 @@ A generic event manager to use on javascript things
 
 [![Build Status](https://travis-ci.org/holywyvern/generic-events.svg?branch=master)](https://travis-ci.org/holywyvern/generic-events)
 [![Documentation](http://inch-ci.org/github/holywyvern/generic-events.svg?branch=master)](http://inch-ci.org/github/holywyvern/generic-events)
+[![Code Climate](https://codeclimate.com/github/holywyvern/generic-events/badges/gpa.svg)](https://codeclimate.com/github/holywyvern/generic-events)
+[![Test Coverage](https://codeclimate.com/github/holywyvern/generic-events/badges/coverage.svg)](https://codeclimate.com/github/holywyvern/generic-events/coverage)
+[![Issue Count](https://codeclimate.com/github/holywyvern/generic-events/badges/issue_count.svg)](https://codeclimate.com/github/holywyvern/generic-events)
 
 ## example
 ```js
