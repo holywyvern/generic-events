@@ -1,6 +1,6 @@
 declare module "generic-events" {
 
-    export type EventCallback = (...args: any) => any;
+    export type EventCallback = (...args: any[]) => any;
 
     export default class EventManager {
         /**
