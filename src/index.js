@@ -66,7 +66,7 @@ class EventManager {
       let j = events[name].indexOf(callbacks[i]);
       while (j !== -1) {
         events[name].splice(j, 1);
-        j = events.indexOf(callbacks[i]);
+        j = events[name].indexOf(callbacks[i]);
       }
     }
   }
